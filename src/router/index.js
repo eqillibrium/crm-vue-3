@@ -59,8 +59,8 @@ const routes = [
     }
   },
   {
-    name: 'auth',
-    path: '/auth',
+    name: 'login',
+    path: '/login',
     component: () => import('../views/Login'),
     meta: {
       layout: 'auth'
@@ -78,7 +78,9 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  linkActiveClass: 'active',
+  linkExactActiveClass: 'active'
 })
 
 export default router
