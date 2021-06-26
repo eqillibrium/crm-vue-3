@@ -49,36 +49,12 @@
 
 <script>
 // import { useRouter } from 'vue-router'
-import useVuelidate from '@vuelidate/core'
-import { required, email, minLength } from '@vuelidate/validators'
-import { reactive, computed } from 'vue'
+import { useFormValidation } from '../use/form-validation'
+
 export default {
   name: 'Login',
   setup () {
-    // const router = useRouter()
-    const state = reactive({
-      email: '',
-      password: ''
-    })
-    const rules = {
-      email: { required, email },
-      password: { required, minLength: minLength(6) }
-    }
-    const v$ = useVuelidate(rules, state)
-    const isEmailInvalid = computed(() =>
-      (v$.value.email.required.$invalid && v$.value.email.$dirty) ||
-      v$.value.email.email.$invalid
-    )
-    const isPasswordInvalid = computed(() =>
-      (v$.value.password.required.$invalid && v$.value.password.$dirty) ||
-        v$.value.password.minLength.$invalid
-    )
-    const submitEnter = () => {
-      if (!v$.value.$invalid) {
-        console.log(state)
-      }
-    }
-    return { submitEnter, v$, state, isEmailInvalid, isPasswordInvalid }
+    return { ...useFormValidation() }
   }
 }
 </script>
