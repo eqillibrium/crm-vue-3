@@ -48,12 +48,22 @@
 </template>
 
 <script>
-// import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useFormValidation } from '../use/form-validation'
+import { onMounted } from 'vue'
+import messages from '../utils/messageMap'
+import Materialize from 'materialize-css'
 
 export default {
   name: 'Login',
   setup () {
+    const route = useRoute()
+    const message = route.query.message
+    if (message) {
+      onMounted(() => {
+        Materialize.toast({ html: messages[message] })
+      })
+    }
     return { ...useFormValidation() }
   }
 }

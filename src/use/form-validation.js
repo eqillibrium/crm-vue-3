@@ -1,8 +1,12 @@
 import useVuelidate from '@vuelidate/core'
 import { email, minLength, required } from '@vuelidate/validators'
 import { computed, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export function useFormValidation (type = 'auth') {
+  const store = useStore()
+  const router = useRouter()
   const state = reactive({
     email: '',
     password: ''
@@ -35,13 +39,22 @@ export function useFormValidation (type = 'auth') {
       v$.value.name.minLength.$invalid
     )
   }
-  const submitEnter = () => {
+  const submitEnter = async () => {
     if (!v$.value.$invalid) {
       console.log(state)
+      await store.dispatch('auth/login', state)
+      await router.push('/')
+    }
+  }
+  const submitRegister = async () => {
+    if (!v$.value.$invalid) {
+      console.log(state)
+      await store.dispatch('auth/register', state)
+      await router.push('/')
     }
   }
   if (type === 'register') {
-    return { submitEnter, v$, state, isEmailInvalid, isPasswordInvalid, isNameInvalid }
+    return { submitRegister, v$, state, isEmailInvalid, isPasswordInvalid, isNameInvalid }
   } else {
     return { submitEnter, v$, state, isEmailInvalid, isPasswordInvalid }
   }

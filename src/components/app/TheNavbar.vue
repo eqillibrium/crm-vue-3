@@ -20,17 +20,17 @@
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
-          <ul id='dropdown' class='dropdown-content'>
+          <ul id='dropdown' class='dropdown-content' >
             <li>
               <router-link to="/profile" class="black-text">
                 <i class="material-icons">account_circle</i>Профиль
               </router-link>
             </li>
             <li class="divider" tabindex="-1"></li>
-            <li>
-              <router-link to="/register" class="black-text">
-                <i class="material-icons">assignment_return</i>Выйти
-              </router-link>
+            <li @click="logout">
+              <a href="#" class="black-text">
+                <i class="material-icons black-text">assignment_return</i>Выйти
+              </a>
             </li>
           </ul>
         </li>
@@ -41,6 +41,7 @@
 
 <script>
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { dateFormatter } from '../../utils/dateFormatter'
 import Materialize from 'materialize-css'
@@ -49,11 +50,16 @@ export default {
   name: 'TheNavbar',
   setup () {
     const store = useStore()
+    const router = useRouter()
     const toggleSidebar = () => store.commit('toggleSidebar')
     const dropdown = ref(null)
     const currentDate = ref(null)
     const interval = ref(null)
     const mDrop = ref(null)
+    const logout = () => {
+      store.commit('auth/logout')
+      router.push('/login?message=logout')
+    }
     onMounted(() => {
       mDrop.value = Materialize.Dropdown.init(dropdown.value)
       interval.value = setInterval(() => {
@@ -65,7 +71,7 @@ export default {
       mDrop.value.destroy()
       console.log('onBeforeUnmount')
     })
-    return { toggleSidebar, dropdown, currentDate, dateFormatter }
+    return { toggleSidebar, dropdown, currentDate, dateFormatter, logout }
   }
 }
 </script>
